@@ -62,6 +62,7 @@ module Hand
     puts "---- #{name}'s hand ----"
     cards.each { |card| puts card }
     puts "For a total of: #{total}"
+    puts ""
   end
   
   def total
@@ -107,6 +108,7 @@ class Dealer
     puts "---- #{name}'s hand ----"
     puts "#{name}'s first card is hidden"
     puts "Second card: #{cards[1]}"
+    puts ""
   end
 end
 
@@ -150,10 +152,15 @@ class BlackJack
     black_jack_or_bust?(dealer, dealer.total)
     dealer.show_cards
     while dealer.total < 17 && dealer.total < player.total
+      puts "Dealer chose to hit"
       dealer.add_card(deck.deal_one)
+      dealer.show_cards
     end
-    dealer.show_cards
     black_jack_or_bust?(dealer, dealer.total)
+    if dealer.total > 17
+      puts "Dealer chose to stay at #{dealer.total}"
+      dealer.show_cards
+    end
   end
   
   def player_turn
