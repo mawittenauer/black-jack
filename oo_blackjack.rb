@@ -34,22 +34,22 @@ class Deck
     @cards = []
     SUITS.each do |suit|
       VALUES.each do |value|
-        @cards << Card.new(suit, value)
+        cards << Card.new(suit, value)
       end
     end
     shuffle!
   end
   
   def shuffle!
-    @cards.shuffle!
+    cards.shuffle!
   end
   
   def count
-    @cards.count
+    cards.count
   end
   
   def deal_one
-    @cards.pop
+    cards.pop
   end
 end
 
@@ -126,37 +126,37 @@ class BlackJack
   def check_for_winner
     if dealer.total == player.total
       puts "It's a draw"
-      play_again?
+      play_again
     elsif dealer.total > player.total
       puts "#{dealer.name} wins!"
-      play_again?
+      play_again
     else
       puts "#{player.name} wins!"
-      play_again?
+      play_again
     end
   end
   
-  def black_jack_or_bust?(player, total)
+  def black_jack_or_bust(player, total)
     if total == 21
       player.show_cards
       puts "#{player.name} hit blackjack!"
-      play_again?
+      play_again
     elsif total > 21
       player.show_cards
       puts "#{player.name} bust!"
-      play_again?
+      play_again
     end
   end
   
   def dealer_turn
-    black_jack_or_bust?(dealer, dealer.total)
+    black_jack_or_bust(dealer, dealer.total)
     dealer.show_cards
-    while dealer.total < 17 && dealer.total < player.total
+    while dealer.total < 17
       puts "Dealer chose to hit"
       dealer.add_card(deck.deal_one)
       dealer.show_cards
     end
-    black_jack_or_bust?(dealer, dealer.total)
+    black_jack_or_bust(dealer, dealer.total)
     if dealer.total > 17
       puts "Dealer chose to stay at #{dealer.total}"
       dealer.show_cards
@@ -164,7 +164,7 @@ class BlackJack
   end
   
   def player_turn
-    black_jack_or_bust?(player, player.total)
+    black_jack_or_bust(player, player.total)
     loop do
       system 'clear'
       player.show_cards
@@ -179,20 +179,20 @@ class BlackJack
         break
       else
         player.add_card(deck.deal_one)
-        black_jack_or_bust?(player, player.total)
+        black_jack_or_bust(player, player.total)
       end
     end
   
   end
   
   def initial_deal
-    player.add_card(deck.deal_one)
-    dealer.add_card(deck.deal_one)
-    player.add_card(deck.deal_one)
-    dealer.add_card(deck.deal_one)
+    2.times do
+      player.add_card(deck.deal_one)
+      dealer.add_card(deck.deal_one)
+    end
   end
 
-  def play_again?
+  def play_again
     begin
       puts "Would you like to play again? ('yes' or 'no')"
       play_again = gets.chomp
@@ -210,12 +210,11 @@ class BlackJack
   end 
   
   def play
-    loop do
-      initial_deal
-      player_turn
-      dealer_turn
-      check_for_winner
-    end
+    initial_deal
+    player_turn
+    dealer_turn
+    check_for_winner
+    play_again
   end
 end
 
